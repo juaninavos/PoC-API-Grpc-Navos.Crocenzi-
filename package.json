@@ -1,0 +1,33 @@
+{
+  "name": "grpc-alumno-poc",
+  "version": "1.0.0",
+  "description": "Prueba de Concepto (PoC) de gRPC para CRUD de Alumnos - Cátedra DSW",
+  "main": "index.js",
+  "scripts": {
+    "start:server": "node server/server.js",
+    "start:client": "node client/client.js",
+    "demo": "echo \"📋 Para ejecutar la demo completa:\" && echo \"1. Abre una terminal y ejecuta: npm run start:server\" && echo \"2. Abre otra terminal y ejecuta: npm run start:client\"",
+    "demo:windows": "powershell -Command \"Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd \\\"$pwd\\\"; node server/server.js'; Start-Sleep 3; node client/client.js\"",
+    "test": "npm run start:client"
+  },
+  "keywords": [
+    "grpc",
+    "nodejs",
+    "crud",
+    "poc",
+    "dsw"
+  ],
+  "author": "Estudiante DSW",
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.9.0",
+    "@grpc/proto-loader": "^0.7.8",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,37 @@
+# Logs del servidor y salidas de desarrollo
+logs/
+*.log
+
+# Dependencias de Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos compilados
+dist/
+build/
+
+# Archivos de cobertura de tests
+coverage/
+
+# Archivos de configuración específicos del proyecto
+.nyc_output

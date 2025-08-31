@@ -27,100 +27,52 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-// ============ FUNCIONES gRPC INDIVIDUALES ============
+// ============ Funciones gRPC ============
 
-/**
- * 1. Contar alumnos - GetAlumnoCount
- * Llama a: servidor.getAlumnoCount()
- * Envía: {} (request vacío)
- * Recibe: { count: number }
- */
 function contarAlumnos() {
-  console.log('\nEJECUTANDO: GetAlumnoCount');
-  console.log('   Llamada gRPC: client.getAlumnoCount({}, callback)');
-  console.log('   Envía: {} (sin parámetros)');
-  console.log('   Espera: { count: number }\n');
-  
   return new Promise((resolve, reject) => {
     client.getAlumnoCount({}, (error, response) => {
       if (error) {
-        console.error('Error en GetAlumnoCount:', error.message);
+        console.error('Error:', error.message);
         reject(error);
       } else {
-        console.log('Respuesta del servidor:');
-        console.log(`   Total de alumnos: ${response.count}`);
+        console.log(`Total de alumnos: ${response.count}`);
         resolve(response);
       }
     });
   });
 }
 
-/**
- * 2. Listar alumnos - GetAllAlumnos  
- * Llama a: servidor.getAllAlumnos()
- * Envía: {} (request vacío)
- * Recibe: { alumnos: [array de objetos Alumno] }
- */
 function listarAlumnos() {
-  console.log('\nEJECUTANDO: GetAllAlumnos');
-  console.log('   Llamada gRPC: client.getAllAlumnos({}, callback)');
-  console.log('   Envía: {} (sin parámetros)');
-  console.log('   Espera: { alumnos: Alumno[] }\n');
-  
   return new Promise((resolve, reject) => {
     client.getAllAlumnos({}, (error, response) => {
       if (error) {
-        console.error('Error en GetAllAlumnos:', error.message);
+        console.error('Error:', error.message);
         reject(error);
       } else {
-        console.log('Respuesta del servidor:');
-        console.log(`   Cantidad de alumnos: ${response.alumnos.length}`);
-        
-        if (response.alumnos.length > 0) {
-          console.log('\n   Lista de alumnos:');
-          response.alumnos.forEach((alumno, index) => {
-            console.log(`   ${index + 1}. ${alumno.name} ${alumno.lastname}`);
-            console.log(`      Email: ${alumno.mail}`);
-            console.log(`      ID: ${alumno.id}\n`);
-          });
-        } else {
-          console.log('   (No hay alumnos registrados)');
-        }
+        console.log(`\nAlumnos encontrados: ${response.alumnos.length}`);
+        response.alumnos.forEach((alumno, index) => {
+          console.log(`${index + 1}. ${alumno.name} ${alumno.lastname} - ${alumno.mail}`);
+        });
         resolve(response);
       }
     });
   });
 }
 
-/**
- * 3. Agregar alumno - AddAlumno
- * Llama a: servidor.addAlumno()
- * Envía: { name: string, lastname: string, mail: string }
- * Recibe: { alumno: Alumno, success: boolean, message: string }
- */
 function agregarAlumno(name, lastname, mail) {
-  console.log('\nEJECUTANDO: AddAlumno');
-  console.log('   Llamada gRPC: client.addAlumno(request, callback)');
-  console.log(`   Envía: { name: "${name}", lastname: "${lastname}", mail: "${mail}" }`);
-  console.log('   Espera: { alumno: Alumno, success: boolean, message: string }\n');
-  
   return new Promise((resolve, reject) => {
     const request = { name, lastname, mail };
     
     client.addAlumno(request, (error, response) => {
       if (error) {
-        console.error('Error en AddAlumno:', error.message);
+        console.error('Error:', error.message);
         reject(error);
       } else {
-        console.log('Respuesta del servidor:');
-        console.log(`   Éxito: ${response.success}`);
-        console.log(`   Mensaje: ${response.message}`);
-        
-        if (response.success && response.alumno) {
-          console.log('\n   Alumno creado:');
-          console.log(`      Nombre: ${response.alumno.name} ${response.alumno.lastname}`);
-          console.log(`      Email: ${response.alumno.mail}`);
-          console.log(`      ID: ${response.alumno.id}`);
+        if (response.success) {
+          console.log(`Alumno ${response.alumno.name} ${response.alumno.lastname} agregado correctamente`);
+        } else {
+          console.log(`Error: ${response.message}`);
         }
         resolve(response);
       }
@@ -128,25 +80,19 @@ function agregarAlumno(name, lastname, mail) {
   });
 }
 
-// ============ SISTEMA DE MENÚ INTERACTIVO ============
+// ============ Menú ============
 
 function mostrarMenu() {
-  console.log('\n===============================================');
-  console.log('CLIENTE gRPC INTERACTIVO');
-  console.log('===============================================');
-  console.log('Selecciona una opción:');
-  console.log('');
-  console.log('1. Contar alumnos       (GetAlumnoCount)');
-  console.log('2. Listar alumnos       (GetAllAlumnos)');
-  console.log('3. Agregar alumno       (AddAlumno)');
+  console.log('\n=== Cliente gRPC ===');
+  console.log('1. Contar alumnos');
+  console.log('2. Listar alumnos');
+  console.log('3. Agregar alumno');
   console.log('4. Salir');
-  console.log('');
-  console.log('===============================================');
 }
 
 function preguntarOpcion() {
   return new Promise((resolve) => {
-    rl.question('Ingresa tu opción (1-4): ', (respuesta) => {
+    rl.question('Opción: ', (respuesta) => {
       resolve(respuesta.trim());
     });
   });
@@ -154,11 +100,9 @@ function preguntarOpcion() {
 
 function preguntarDatosAlumno() {
   return new Promise((resolve) => {
-    console.log('\nDatos del nuevo alumno:');
-    
-    rl.question('   Nombre: ', (nombre) => {
-      rl.question('   Apellido: ', (apellido) => {
-        rl.question('   Email: ', (email) => {
+    rl.question('Nombre: ', (nombre) => {
+      rl.question('Apellido: ', (apellido) => {
+        rl.question('Email: ', (email) => {
           resolve({ nombre, apellido, email });
         });
       });

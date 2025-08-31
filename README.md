@@ -2,13 +2,13 @@
 
 ## Descripción
 
-Esta es una **Prueba de Concepto (PoC) de gRPC** desarrollada para la cátedra de **Desarrollo de Software (DSW)**. 
+Prueba de Concepto (PoC) de gRPC para la cátedra de **Desarrollo de Software (DSW)**. 
 
-El proyecto demuestra las características principales de gRPC con **3 operaciones esenciales** y un **cliente interactivo** que permite probar cada función individualmente.
+Demuestra las características principales de gRPC con **3 operaciones esenciales** y un **cliente interactivo**.
 
 ## Objetivo
 
-Entender las diferencias entre gRPC y otras tecnologías (REST, GraphQL) mediante un ejemplo práctico con **menú interactivo** para pruebas individuales.
+Comparar gRPC con otras tecnologías (REST, GraphQL) mediante un ejemplo práctico con **menú interactivo**.
 
 ## Estructura del Proyecto
 

@@ -6,8 +6,8 @@
   "scripts": {
     "start:server": "node server/server.js",
     "start:client": "node client/client.js",
-    "demo": "echo \"📋 Para ejecutar la demo completa:\" && echo \"1. Abre una terminal y ejecuta: npm run start:server\" && echo \"2. Abre otra terminal y ejecuta: npm run start:client\"",
-    "demo:windows": "powershell -Command \"Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd \\\"$pwd\\\"; node server/server.js'; Start-Sleep 3; node client/client.js\"",
+    "dev:server": "echo 'Terminal 1: Servidor gRPC iniciado' && node server/server.js",
+    "dev:client": "echo 'Terminal 2: Cliente gRPC iniciado' && node client/client.js",
     "test": "npm run start:client"
   },
   "keywords": [

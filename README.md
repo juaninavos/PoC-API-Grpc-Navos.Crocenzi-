@@ -1,336 +1,328 @@
-# 🎓 PoC gRPC - CRUD de Alumnos
+# PoC gRPC - Cliente Interactivo para Alumnos
 
-## 📋 Descripción
+## Descripción
 
-Esta es una **Prueba de Concepto (PoC)** de **gRPC** desarrollada para la cátedra de **Desarrollo de Software (DSW)**. 
+Esta es una **Prueba de Concepto (PoC) de gRPC** desarrollada para la cátedra de **Desarrollo de Software (DSW)**. 
 
-El proyecto implementa un CRUD completo de alumnos utilizando **Node.js** y **gRPC**, demostrando las características principales de esta tecnología de comunicación moderna.
+El proyecto demuestra las características principales de gRPC con **3 operaciones esenciales** y un **cliente interactivo** que permite probar cada función individualmente.
 
-## 🎯 Objetivos Académicos
+## Objetivo
 
-- Demostrar el uso práctico de gRPC para operaciones CRUD
-- Comparar gRPC con otras tecnologías de API (GraphQL, REST, JSON-RPC, tRPC)
-- Mostrar las ventajas de Protocol Buffers (.proto) para definir contratos
-- Implementar cliente y servidor gRPC funcionales
-- Mantener los datos en memoria para simplificar la demostración
+Entender las diferencias entre gRPC y otras tecnologías (REST, GraphQL) mediante un ejemplo práctico con **menú interactivo** para pruebas individuales.
 
-## 🏗️ Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 grpc-alumno-poc/
 ├── proto/
-│   └── alumno.proto          # Definición del contrato gRPC
+│   └── alumno.proto          # Contrato gRPC (3 operaciones)
 ├── server/
-│   └── server.js            # Implementación del servidor gRPC
+│   └── server.js            # Servidor gRPC simplificado  
 ├── client/
-│   └── client.js            # Cliente gRPC con demos completas
-├── package.json             # Dependencias y scripts
-└── README.md               # Este archivo
+│   └── client.js            # Cliente interactivo con menú
+├── package.json             # Dependencias
+└── README.md               # Esta documentación
 ```
 
-## 📊 Modelo de Datos - Alumno
+## Operaciones gRPC Implementadas
 
-Cada alumno tiene los siguientes campos:
+### 1. **GetAlumnoCount** - Contar alumnos
+```protobuf
+rpc GetAlumnoCount(CountRequest) returns (CountResponse);
+```
+- **Envía**: `{}` (request vacío)
+- **Recibe**: `{ count: number }`
+- **Función**: Devuelve la cantidad total de alumnos
 
-- **id** (string): UUID autogenerado
-- **name** (string): Nombre del alumno
-- **lastname** (string): Apellido del alumno
-- **mail** (string): Email del alumno (único)
-- **phone** (string): Teléfono (opcional)
-- **street** (string): Dirección - Calle
-- **city** (string): Dirección - Ciudad
+### 2. **GetAllAlumnos** - Listar alumnos
+```protobuf
+rpc GetAllAlumnos(GetAllRequest) returns (GetAllResponse);
+```
+- **Envía**: `{}` (request vacío)  
+- **Recibe**: `{ alumnos: Alumno[] }`
+- **Función**: Devuelve array con todos los alumnos
 
-## 🔧 Operaciones Implementadas
+### 3. **AddAlumno** - Agregar alumno
+```protobuf
+rpc AddAlumno(AddAlumnoRequest) returns (AddAlumnoResponse);
+```
+- **Envía**: `{ name: string, lastname: string, mail: string }`
+- **Recibe**: `{ alumno: Alumno, success: boolean, message: string }`
+- **Función**: Agrega un nuevo alumno con validación de email único
 
-### 📖 Consultas (Queries)
-- **AlumnoCount**: Devuelve la cantidad total de alumnos
-- **FindAlumno**: Busca un alumno por nombre (búsqueda parcial)
-- **AllAlumnos**: Devuelve la lista completa de alumnos
+## Modelo de Datos
 
-### ✏️ Mutaciones (Mutations)
-- **AddAlumno**: Agrega un nuevo alumno con ID autogenerado
-- **UpdateAlumno**: Actualiza los datos de un alumno existente
-- **DeleteAlumno**: Elimina un alumno por ID
+```protobuf
+message Alumno {
+  string id = 1;       // UUID autogenerado
+  string name = 2;     // Nombre
+  string lastname = 3; // Apellido  
+  string mail = 4;     // Email (único)
+}
+```
 
-## 🚀 Instalación y Configuración
+## Instalación y Ejecución
 
 ### Prerequisitos
-
 - **Node.js** >= 14.0.0
-- **npm** o **yarn**
+- **npm**
 
-### 1. Instalar Dependencias
+### Método Recomendado: Dos Terminales en VS Code
 
+#### **Paso 1: Instalar dependencias**
 ```bash
-# Instalar todas las dependencias necesarias
 npm install
 ```
 
-### 2. Dependencias Principales
+#### **Paso 2: Abrir primera terminal en VS Code**
+- Presiona `Ctrl + `` (backtick) para abrir terminal integrada
+- O ve a: **Terminal** > **New Terminal**
 
-- `@grpc/grpc-js`: Cliente y servidor gRPC para Node.js
-- `@grpc/proto-loader`: Cargador dinámico de archivos .proto
-- `uuid`: Generación de UUIDs para IDs únicos
-
-## ▶️ Ejecutar la PoC
-
-### ✅ Método Recomendado: Dos Terminales
-
-**Terminal 1 - Servidor:**
+#### **Paso 3: Ejecutar servidor**
 ```bash
 npm run start:server
 ```
 
-**Terminal 2 - Cliente (después de que aparezca "Esperando conexiones de clientes..."):**
+#### **Paso 4: Abrir segunda terminal en VS Code**
+- Haz clic en el **"+"** en el panel de terminal
+- O presiona `Ctrl + Shift + `` 
+- Verás dos pestañas de terminal
+
+#### **Paso 5: Ejecutar cliente**
 ```bash
 npm run start:client
 ```
 
-### 🚀 Método Automático en Windows
-
-Para una demostración automática, ejecuta:
-```bash
-npm run demo:windows
-```
-
-### 🔧 Método Manual
+### Scripts Disponibles
 
 ```bash
-# Terminal 1 - Servidor
-node server/server.js
+# Scripts básicos
+npm run start:server    # Inicia servidor gRPC
+npm run start:client    # Inicia cliente interactivo
 
-# Terminal 2 - Cliente (después de que el servidor esté corriendo)
-node client/client.js
+# Scripts con información adicional
+npm run dev:server      # Servidor con mensaje de terminal
+npm run dev:client      # Cliente con mensaje de terminal
 ```
 
-### 💡 En VSCode
-
-1. **Abre la Terminal integrada** (Ctrl+` o View > Terminal)
-2. **Ejecuta el servidor:**
-   ```bash
-   npm run start:server
-   ```
-3. **Abre una nueva terminal** (botón "+" en el panel de terminal)
-4. **Ejecuta el cliente:**
-   ```bash
-   npm run start:client
-   ```
-
-## 🔍 ¿Qué Hace la Demo?
-
-El cliente ejecuta automáticamente todas las operaciones CRUD en el siguiente orden:
-
-1. **📊 Consultar cantidad inicial** de alumnos
-2. **📋 Listar alumnos iniciales** (datos de prueba)
-3. **➕ Agregar nuevo alumno** (Ana Rodríguez)
-4. **🔍 Buscar alumno por nombre** ("Ana")
-5. **✏️ Actualizar datos** del alumno agregado
-6. **📋 Listar alumnos** después de modificaciones
-7. **🗑️ Eliminar** el alumno agregado
-8. **📋 Verificar estado final** de la lista
-9. **📊 Consultar cantidad final** de alumnos
-
-## 📝 Ejemplo de Salida Esperada
+### Guía Visual Rápida
 
 ```
-🚀 ===============================================
-🚀 CLIENTE gRPC - DEMO COMPLETA DE OPERACIONES
-🚀 ===============================================
-📡 Conectando al servidor en localhost:50051...
+VS Code - Configuración de Terminales
+=====================================
 
-============================================================
-🎯 1. CONSULTAR CANTIDAD DE ALUMNOS
-============================================================
-📊 Cantidad total de alumnos: 3
+[Terminal Panel - Vista Inferior]
+┌─────────────────────────────────────────────┐
+│ [powershell ▼] [bash ▼] [+] [⚮] [🗑]        │
+├─────────────────────────────────────────────┤
+│ Terminal 1: SERVIDOR                        │
+│ > npm run start:server                      │
+│ SERVIDOR LISTO - Esperando conexiones...   │
+├─────────────────────────────────────────────┤
+│ Terminal 2: CLIENTE                         │
+│ > npm run start:client                      │
+│ CLIENTE gRPC INTERACTIVO                    │
+│ Ingresa tu opción (1-4):                    │
+└─────────────────────────────────────────────┘
 
-============================================================
-🎯 2. LISTAR ALUMNOS INICIALES
-============================================================
-
-📋 Estado Inicial (3 alumnos):
-
-1. Juan Pérez
-   📧 juan.perez@email.com
-   📱 +54 11 1234-5678
-   🏠 Av. Corrientes 1234, Buenos Aires
-   🆔 550e8400-e29b-41d4-a716-446655440000
-
-2. María García
-   📧 maria.garcia@email.com
-   📱 +54 11 8765-4321
-   🏠 Calle San Martín 567, Córdoba
-   🆔 550e8400-e29b-41d4-a716-446655440001
-
-3. Carlos López
-   📧 carlos.lopez@email.com
-   📱 No especificado
-   🏠 Av. Rivadavia 890, Rosario
-   🆔 550e8400-e29b-41d4-a716-446655440002
-
-============================================================
-🎯 3. AGREGAR NUEVO ALUMNO
-============================================================
-📝 Datos del nuevo alumno a agregar:
-   Nombre: Ana Rodríguez
-   Email: ana.rodriguez@email.com
-   Teléfono: +54 11 5555-6666
-   Dirección: Av. 9 de Julio 1500, Buenos Aires
-
-➕ Resultado de agregar alumno:
-✅ Alumno Ana Rodríguez agregado exitosamente
-🎓 Ana Rodríguez
-   📧 Email: ana.rodriguez@email.com
-   📱 Teléfono: +54 11 5555-6666
-   🏠 Dirección: Av. 9 de Julio 1500, Buenos Aires
-   🆔 ID: 550e8400-e29b-41d4-a716-446655440003
-
-[... resto de operaciones ...]
+Atajos útiles:
+• Ctrl + `          : Abrir/cerrar panel terminal
+• Ctrl + Shift + `  : Nueva terminal
+• Ctrl + C          : Parar proceso actual
 ```
 
-## 🛠️ Características Técnicas de gRPC Demostradas
+### Flujo de Trabajo Recomendado
 
-### 1. **Protocol Buffers (.proto)**
-- Definición de contratos fuertemente tipados
-- Generación automática de código cliente/servidor
+```bash
+# Paso 1: Preparar entorno
+npm install
+
+# Paso 2: Terminal 1 (Servidor)
+npm run dev:server    # Con mensajes informativos
+# O
+npm run start:server  # Versión limpia
+
+# Paso 3: Terminal 2 (Cliente) 
+npm run dev:client    # Con mensajes informativos
+# O  
+npm run start:client  # Versión limpia
+
+# Paso 4: Probar operaciones
+# Usa el menú interactivo en Terminal 2
+# Ve los logs del servidor en Terminal 1
+```
+
+## Cliente Interactivo
+
+El nuevo cliente permite probar cada operación gRPC de forma individual:
+
+```
+===============================================
+CLIENTE gRPC INTERACTIVO
+===============================================
+Selecciona una opción:
+
+1. Contar alumnos       (GetAlumnoCount)
+2. Listar alumnos       (GetAllAlumnos)
+3. Agregar alumno       (AddAlumno)
+4. Salir
+
+===============================================
+Ingresa tu opción (1-4):
+```
+
+### Qué Hace Cada Opción
+
+#### **Opción 1: Contar Alumnos**
+```
+EJECUTANDO: GetAlumnoCount
+   Llamada gRPC: client.getAlumnoCount({}, callback)
+   Envía: {} (sin parámetros)
+   Espera: { count: number }
+
+Respuesta del servidor:
+   Total de alumnos: 2
+```
+
+#### **Opción 2: Listar Alumnos**  
+```
+EJECUTANDO: GetAllAlumnos
+   Llamada gRPC: client.getAllAlumnos({}, callback)
+   Envía: {} (sin parámetros)
+   Espera: { alumnos: Alumno[] }
+
+Respuesta del servidor:
+   Cantidad de alumnos: 2
+
+   Lista de alumnos:
+   1. Juan Pérez
+      Email: juan.perez@email.com
+      ID: 550e8400-e29b-41d4-a716-446655440000
+
+   2. María García
+      Email: maria.garcia@email.com
+      ID: 550e8400-e29b-41d4-a716-446655440001
+```
+
+#### **Opción 3: Agregar Alumno**
+```
+Datos del nuevo alumno:
+   Nombre: Ana
+   Apellido: López
+   Email: ana.lopez@email.com
+
+EJECUTANDO: AddAlumno
+   Llamada gRPC: client.addAlumno(request, callback)
+   Envía: { name: "Ana", lastname: "López", mail: "ana.lopez@email.com" }
+   Espera: { alumno: Alumno, success: boolean, message: string }
+
+Respuesta del servidor:
+   Éxito: true
+   Mensaje: Alumno Ana López agregado exitosamente
+
+   Alumno creado:
+      Nombre: Ana López
+      Email: ana.lopez@email.com
+      ID: 550e8400-e29b-41d4-a716-446655440003
+```
+
+## Diferencias con REST
+
+| Aspecto | REST | gRPC |
+|---------|------|------|
+| **Pruebas** | Navegador, Postman, curl | Cliente específico requerido |
+| **Protocolo** | HTTP + JSON | HTTP/2 + Protobuf |
+| **Formato** | Texto (JSON) | Binario (Protobuf) |
+| **Tipado** | Débil | Fuerte (.proto) |
+| **Rendimiento** | Medio | Alto |
+| **Herramientas** | Muchas | Específicas |
+
+## Ventajas del Cliente Interactivo
+
+1. **Pruebas Individuales**: Ejecuta una operación a la vez
+2. **Detalles Técnicos**: Muestra exactamente qué se envía y recibe
+3. **Debugging Fácil**: Ve errores específicos de cada llamada
+4. **Sin Código**: No necesitas programar para probar
+5. **Reutilizable**: Puedes repetir operaciones sin reiniciar
+
+## Características Técnicas Demostradas
+
+### **Protocol Buffers (.proto)**
+- Contratos fuertemente tipados
+- Validación automática de tipos
 - Serialización binaria eficiente
 
-### 2. **Comunicación Bidireccional**
+### **Comunicación gRPC**
 - Llamadas RPC síncronas
-- Manejo de errores estructurado
-- Respuestas tipadas
+- Manejo estructurado de errores
+- Respuestas tipadas garantizadas
 
-### 3. **Servicios Estructurados**
-- Separación clara entre consultas y mutaciones
-- Reutilización de tipos de datos
-- Versionado de APIs
+### **Cliente Node.js**
+- Conexión persistente al servidor
+- Callbacks asíncronos
+- Manejo de errores gRPC
 
-### 4. **Rendimiento**
-- Comunicación binaria (más rápida que JSON)
-- HTTP/2 como protocolo base
-- Multiplexación de conexiones
+## Dependencias
 
-## 🔧 Personalización y Extensión
+- `@grpc/grpc-js`: Cliente y servidor gRPC para Node.js
+- `@grpc/proto-loader`: Carga dinámica de archivos .proto
+- `uuid`: Generación de IDs únicos
+- `readline`: Interfaz interactiva de consola
 
-### Modificar Datos Iniciales
+## Solución de Problemas
 
-Edita el array `alumnos` en `server/server.js`:
+### Problemas con Terminales en VS Code
 
-```javascript
-let alumnos = [
-  {
-    id: uuidv4(),
-    name: 'Tu Nombre',
-    lastname: 'Tu Apellido',
-    mail: 'tu.email@email.com',
-    phone: '+54 11 1234-5678',
-    street: 'Tu Dirección',
-    city: 'Tu Ciudad'
-  }
-  // ... más alumnos
-];
+#### **No aparece segunda terminal**
+```bash
+# Solución:
+1. Ctrl + Shift + ` para nueva terminal
+2. O haz clic en "+" en el panel de terminal
+3. Verifica que tengas dos pestañas en el panel inferior
 ```
 
-### Agregar Nuevas Operaciones
-
-1. **Actualizar `proto/alumno.proto`** con el nuevo servicio
-2. **Implementar en `server/server.js`** la lógica del servidor
-3. **Usar en `client/client.js`** para probar la nueva funcionalidad
-
-### Cambiar Puerto del Servidor
-
-Modifica la constante en `server/server.js`:
-
-```javascript
-const serverAddress = '0.0.0.0:TU_PUERTO';
+#### **El servidor no para cuando cierro VS Code**
+```bash
+# Solución:
+1. Ve a la terminal del servidor
+2. Presiona Ctrl + C para parar el servidor
+3. O cierra la terminal específica
 ```
 
-Y en `client/client.js`:
-
-```javascript
-const client = new alumnoProto.AlumnoService(
-  'localhost:TU_PUERTO',
-  grpc.credentials.createInsecure()
-);
+#### **No puedo alternar entre terminales**
+```bash
+# Solución:
+1. Haz clic en las pestañas del panel de terminal
+2. O usa el dropdown en el panel de terminal
+3. Cada terminal mantiene su propio proceso
 ```
 
-## 🐛 Solución de Problemas
+### Errores de Conexión
 
-### Error: "Connection refused"
-- **Causa**: El servidor no está corriendo
-- **Solución**: Ejecutar `npm run start:server` primero
-
-### Error: "Module not found"
-- **Causa**: Dependencias no instaladas
-- **Solución**: Ejecutar `npm install`
-
-### Error: "Port already in use"
-- **Causa**: Otro proceso está usando el puerto 50051
-- **Solución**: Cambiar el puerto o cerrar el proceso
-
-### El cliente no muestra resultados
-- **Causa**: Problema de conexión de red
-- **Solución**: Verificar firewall y configuración de red
-
-## 📚 Conceptos de gRPC Aplicados
-
-### 1. **Definición de Servicios**
-```protobuf
-service AlumnoService {
-  rpc AddAlumno(AddAlumnoRequest) returns (AddAlumnoResponse);
-  rpc FindAlumno(FindAlumnoRequest) returns (FindAlumnoResponse);
-  // ... más operaciones
-}
+#### **Error: "Connection refused"**
+```bash
+No se pudo conectar al servidor
+Asegúrate de ejecutar primero: npm run start:server
 ```
 
-### 2. **Mensajes Estructurados**
-```protobuf
-message Alumno {
-  string id = 1;
-  string name = 2;
-  string lastname = 3;
-  // ... más campos
-}
+#### **Error: "Module not found"**
+```bash
+# Solución: Instalar dependencias
+npm install
 ```
 
-### 3. **Llamadas RPC**
-```javascript
-client.addAlumno(request, (error, response) => {
-  if (error) {
-    console.error('Error:', error);
-  } else {
-    console.log('Éxito:', response);
-  }
-});
+#### **Puerto ocupado**
+```bash
+# Cambiar puerto en server/server.js línea 87:
+const serverAddress = '0.0.0.0:NUEVO_PUERTO';
 ```
 
-## 🎯 Comparación con Otras Tecnologías
-
-| Característica | gRPC | GraphQL | REST | JSON-RPC |
-|----------------|------|---------|------|----------|
-| **Protocolo** | HTTP/2 + Protobuf | HTTP + JSON | HTTP + JSON | HTTP + JSON |
-| **Tipado** | ✅ Fuerte | ✅ Fuerte | ❌ Débil | ❌ Débil |
-| **Rendimiento** | ✅ Muy Alto | 🔶 Medio | 🔶 Medio | 🔶 Medio |
-| **Curva de Aprendizaje** | 🔶 Moderada | 🔶 Moderada | ✅ Baja | ✅ Baja |
-| **Herramientas** | ✅ Excelentes | ✅ Excelentes | ✅ Buenas | 🔶 Limitadas |
-
-## 📖 Referencias y Documentación
+## Referencias
 
 - [Documentación oficial de gRPC](https://grpc.io/docs/)
 - [Protocol Buffers](https://developers.google.com/protocol-buffers)
 - [gRPC para Node.js](https://grpc.github.io/grpc/node/)
-- [Comparación de tecnologías de API](https://blog.logrocket.com/comparing-api-architectures-rest-graphql-grpc/)
-
-## 👥 Información del Proyecto
-
-- **Cátedra**: Desarrollo de Software (DSW)
-- **Tecnología**: gRPC + Node.js
-- **Objetivo**: Prueba de Concepto académica
-- **Estado**: ✅ Completado y funcional
-
-## 📞 Contacto y Soporte
-
-Para preguntas sobre esta PoC, contacta a tu equipo de desarrollo o consulta la documentación de la cátedra.
 
 ---
 
-**🎓 Desarrollado para la cátedra de Desarrollo de Software (DSW)**
+**Desarrollado para la cátedra de Desarrollo de Software (DSW)**

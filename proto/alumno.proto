@@ -2,17 +2,15 @@ syntax = "proto3";
 
 package alumno;
 
-// Servicio simplificado para demostrar gRPC
+
 service AlumnoService {
-  // Consultas básicas
+  
   rpc GetAlumnoCount(CountRequest) returns (CountResponse);
   rpc GetAllAlumnos(GetAllRequest) returns (GetAllResponse);
-  
-  // Mutación básica
   rpc AddAlumno(AddAlumnoRequest) returns (AddAlumnoResponse);
 }
 
-// Definición básica del Alumno
+
 message Alumno {
   string id = 1;
   string name = 2;

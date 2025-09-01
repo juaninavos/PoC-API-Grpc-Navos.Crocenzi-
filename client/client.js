@@ -15,19 +15,18 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const alumnoProto = grpc.loadPackageDefinition(packageDefinition).alumno;
 
-// Crear cliente gRPC
+
 const client = new alumnoProto.AlumnoService(
   'localhost:50051',
   grpc.credentials.createInsecure()
 );
 
-// Configurar readline para input del usuario
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-// ============ Funciones gRPC ============
+// Funciones  
 
 function contarAlumnos() {
   return new Promise((resolve, reject) => {
@@ -80,7 +79,7 @@ function agregarAlumno(name, lastname, mail) {
   });
 }
 
-// ============ Menú ============
+// Menú 
 
 function mostrarMenu() {
   console.log('\n=== Cliente gRPC ===');
@@ -147,7 +146,6 @@ async function procesarOpcion(opcion) {
 async function menuPrincipal() {
   console.log('Conectando al servidor gRPC en localhost:50051...\n');
   
-  // Verificar conexión inicial
   try {
     await contarAlumnos();
     console.log('\nConexión establecida correctamente');
@@ -157,13 +155,11 @@ async function menuPrincipal() {
     process.exit(1);
   }
   
-  // Bucle principal del menú
   while (true) {
     mostrarMenu();
     const opcion = await preguntarOpcion();
     await procesarOpcion(opcion);
     
-    // Pausa antes de mostrar el menú nuevamente
     if (opcion !== '4') {
       await new Promise(resolve => {
         rl.question('\nPresiona Enter para continuar...', () => resolve());
@@ -172,7 +168,6 @@ async function menuPrincipal() {
   }
 }
 
-// ============ PUNTO DE ENTRADA ============
 
 if (require.main === module) {
   menuPrincipal().catch((error) => {

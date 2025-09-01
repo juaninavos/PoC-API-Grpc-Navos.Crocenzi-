@@ -15,7 +15,7 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const alumnoProto = grpc.loadPackageDefinition(packageDefinition).alumno;
 
-// Base de datos simple en memoria
+// bdd
 let alumnos = [
   {
     id: uuidv4(),
@@ -31,33 +31,27 @@ let alumnos = [
   }
 ];
 
-// ============ IMPLEMENTACIÓN ============
+// IMPLEMENTACIÓN 
 
-/**
- * Obtener cantidad de alumnos
- */
+
 function getAlumnoCount(call, callback) {
   callback(null, {
     count: alumnos.length
   });
 }
 
-/**
- * Obtener todos los alumnos
- */
+
 function getAllAlumnos(call, callback) {
   callback(null, {
     alumnos: alumnos
   });
 }
 
-/**
- * Agregar nuevo alumno
- */
+
 function addAlumno(call, callback) {
   const { name, lastname, mail } = call.request;
   
-  // Validación: verificar email único
+  // Validación
   const existingAlumno = alumnos.find(a => a.mail === mail);
   if (existingAlumno) {
     callback(null, {
@@ -68,7 +62,6 @@ function addAlumno(call, callback) {
     return;
   }
   
-  // Crear y agregar nuevo alumno
   const nuevoAlumno = {
     id: uuidv4(),
     name,
@@ -85,12 +78,11 @@ function addAlumno(call, callback) {
   });
 }
 
-// ============ CONFIGURACIÓN ============
+// CONFIGURACIÓN 
 
 function main() {
   const server = new grpc.Server();
   
-  // Registrar operaciones
   server.addService(alumnoProto.AlumnoService.service, {
     getAlumnoCount: getAlumnoCount,
     getAllAlumnos: getAllAlumnos,
